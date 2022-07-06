@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-green-2
+  labels:
+    app: http
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: http-green
+  template:
+    metadata:
+      labels:
+        app: http-green
+    spec:
+      containers:
+      - name: http-echo
+        image: hashicorp/http-echo
+        args: ["--text","hello-green"]
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "200m"
+          limits:
+            memory: "150Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
